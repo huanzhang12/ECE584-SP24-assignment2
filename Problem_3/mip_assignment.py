@@ -29,6 +29,7 @@ class Verifier:
     def __init__(self):
         # Create the MIP solver object.
         self.gurobi_model = gurobipy.Model('MIP')
+        # Remove the line below to see more verbose information from Gurobi.
         self.gurobi_model.setParam('OutputFlag', 0)
         self.x_vars = []
 
@@ -47,6 +48,7 @@ class Verifier:
             # TODO : Append to x_vars - a list of variable having lower and upper bounds
             # TODO : Hint - Use .addVar in gurobipy
             # YOUR CODE HERE
+            # self.x_vars.append(self.gurobi_model.addVar(...))
             pass
         self.gurobi_model.update()
         print(f"Created {len(self.x_vars)} input variables")
@@ -100,6 +102,7 @@ class Verifier:
         # Post activation variables.
         n_inputs = len(upper_bounds)
         hatz_vars = self.gurobi_model.addVars(n_inputs)
+        # Some p variables will not be used if that neuron is stable.
         p_vars = self.gurobi_model.addVars(n_inputs, vtype=gurobipy.GRB.BINARY)
         self.gurobi_model.update()
 
@@ -146,6 +149,7 @@ class Verifier:
             # Hint - direction can either be 'minimzation' or 'maximization' and use self.gurobi_model.setObjective
             if direction == 'minimization':
                 # YOUR CODE HERE
+                # self.gurobi_model.setObjective(...)
                 pass
             elif direction == 'maximization':
                 # YOUR CODE HERE
@@ -153,7 +157,7 @@ class Verifier:
             else:
                 raise ValueError(direction)
             self.gurobi_model.optimize()
-
+            # In production-ready code, you should can check for infeasible solutions, timeout, etc here.
             # TODO: Check if gurobi model is at optimal status
             assert True # YOUR CODE HERE
 
@@ -188,10 +192,12 @@ class Verifier:
             target_labels.append(i)
             if i == groundtruth_label:
                 # YOUR CODE HERE
+                # objectives.append(...)
                 pass
             # Optimization objective we want to minimize.
-            # TODO : append objective that needs to be minified, think about the original label and the one after perturbation
+            # TODO : append objective that needs to be minimized, think about the original label and the one after perturbation
             # YOUR CODE HERE
+            # objectives.append(...)
 
         return objectives, target_labels
 
